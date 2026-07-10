@@ -1,0 +1,524 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人主页</title>
+  <!-- 样式写在 style 标签里，这叫"内嵌 CSS" -->
+  <style>    /* ===== 全局重置 ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f8f9fa;
+      color: #1a1a2e;
+      line-height: 1.7;
+      scroll-behavior: smooth;
+    }
+
+    /* ===== 顶部导航 ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .navbar .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: #4a3f7a;
+    }
+
+    .navbar .nav-links a {
+      margin-left: 28px;
+      text-decoration: none;
+      color: #555;
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .navbar .nav-links a:hover {
+      color: #4a3f7a;
+    }
+
+    /* ===== Hero 区域 ===== */
+    .hero {
+      margin-top: 60px;
+      background: linear-gradient(135deg, #4a3f7a 0%, #6c63ff 50%, #a78bfa 100%);
+      color: white;
+      text-align: center;
+      padding: 100px 20px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.6);
+      object-fit: cover;
+      margin-bottom: 24px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero .subtitle {
+      font-size: 18px;
+      opacity: 0.85;
+      margin-bottom: 6px;
+    }
+
+    .hero .tagline {
+      font-size: 15px;
+      opacity: 0.65;
+      margin-bottom: 24px;
+    }
+
+    .hero #greeting {
+      font-size: 16px;
+      opacity: 0.8;
+      margin-bottom: 6px;
+    }
+
+    .hero .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .hero .hero-actions .toggle-btn,
+    .hero .hero-actions .like-btn {
+      padding: 10px 24px;
+      font-size: 15px;
+      border: 2px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.25s;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero .hero-actions .toggle-btn:hover,
+    .hero .hero-actions .like-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-2px);
+    }
+
+    .hero .hero-actions .link-btn {
+      display: inline-block;
+      padding: 10px 24px;
+      font-size: 15px;
+      border: 2px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border-radius: 8px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.25s;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero .hero-actions .link-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-2px);
+    }
+
+
+
+    .hero .like-count {
+      font-size: 18px;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    #clock {
+      margin-top: 16px;
+      font-size: 16px;
+      opacity: 0.7;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      letter-spacing: 3px;
+    }
+
+    /* ===== 内容区块 ===== */
+    .section {
+      max-width: 960px;
+      margin: 60px auto;
+      padding: 0 24px;
+    }
+
+    .section h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 28px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section h2::after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #6c63ff, #a78bfa);
+      border-radius: 2px;
+    }
+
+    .section p {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 12px;
+      max-width: 640px;
+    }
+
+    /* ===== 技能卡片 ===== */
+    .skills {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .skill-card {
+      background: white;
+      border-radius: 10px;
+      padding: 14px 22px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      font-weight: 500;
+      color: #333;
+      transition: all 0.25s;
+      cursor: default;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .skill-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(108,99,255,0.12);
+      border-color: rgba(108,99,255,0.15);
+    }
+
+    /* ===== 项目卡片 ===== */
+    .project-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: all 0.25s;
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(108,99,255,0.1);
+      border-color: rgba(108,99,255,0.12);
+    }
+
+    .project-card h3 {
+      font-size: 18px;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .project-card p {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 0;
+    }
+
+    /* ===== 底部 ===== */
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      background: #1a1a2e;
+      color: rgba(255,255,255,0.7);
+      margin-top: 80px;
+    }
+
+    .footer a {
+      color: #a78bfa;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      color: #c4b5fd;
+    }
+
+    /* ===== 回到顶部按钮 ===== */
+    #backToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #6c63ff;
+      color: white;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      box-shadow: 0 4px 12px rgba(108,99,255,0.3);
+      z-index: 99;
+    }
+
+    #backToTop.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    #backToTop:hover {
+      background: #5a52e0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(108,99,255,0.4);
+    }
+
+    .dark-mode #backToTop {
+      box-shadow: 0 4px 12px rgba(108,99,255,0.2);
+    }
+
+    /* ===== 夜间模式 ===== */
+    .dark-mode {
+      background: #121220;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .navbar {
+      background: rgba(18,18,32,0.9);
+      border-bottom-color: rgba(255,255,255,0.05);
+    }
+
+    .dark-mode .navbar .logo {
+      color: #a78bfa;
+    }
+
+    .dark-mode .navbar .nav-links a {
+      color: #aaa;
+    }
+
+    .dark-mode .navbar .nav-links a:hover {
+      color: #a78bfa;
+    }
+
+    .dark-mode .section h2 {
+      color: #e0e0e0;
+    }
+
+    .dark-mode .section p {
+      color: #999;
+    }
+
+    .dark-mode .skill-card,
+    .dark-mode .project-card {
+      background: #1e1e32;
+      color: #ddd;
+      border-color: rgba(255,255,255,0.06);
+    }
+
+    .dark-mode .skill-card:hover,
+    .dark-mode .project-card:hover {
+      border-color: rgba(108,99,255,0.3);
+    }
+
+    .dark-mode .project-card h3 {
+      color: #e0e0e0;
+    }
+
+    .dark-mode .project-card p {
+      color: #888;
+    }</style>
+</head>
+<body>
+  
+  <!-- ===== 导航栏 ===== -->
+  <div class="navbar">
+    <span class="logo">🔖 连展锋</span>
+    <div class="nav-links">
+      <a href="#about">关于</a>
+      <a href="#skills">技能</a>
+      <a href="#projects">项目</a>
+    </div>
+  </div>
+
+  <!-- ===== Hero 区域 ===== -->
+  <div class="hero">
+    <img src="images/avatar.jpg" alt="我的照片" class="avatar" />
+    <h1>连展锋</h1>
+    <p class="subtitle">集美大学准大一新生 · 正在学编程</p>
+    <p id="greeting"></p>
+    <p class="tagline">编码 · 创造 · 成长</p>
+    <div class="hero-actions">
+      <button class="toggle-btn" onclick="toggleDarkMode()">🌙 夜间</button>
+      <a href="https://github.com/LianZhanfeng" target="_blank" class="link-btn">📂 GitHub</a>
+      <button class="like-btn" onclick="addLike()">❤️ 点赞 <span class="like-count" id="likeCount">0</span></button>
+    </div>
+    <p id="clock"></p>
+  </div>
+  <!-- ===== 关于我 ===== -->
+  <div class="section" id="about">
+    <h2>关于我</h2>
+    <p>
+      你好！我是连展锋，2026 年高考生，即将进入集美大学就读。
+      这个暑假开始学习前端开发，目标是能用代码做出有用的东西。
+    </p>
+    <p>
+      平时喜欢打篮球、打游戏，也喜欢研究各种效率工具。
+    </p>
+  </div>
+
+  <!-- ===== 技能 ===== -->
+  <div class="section" id="skills">
+    <h2>正在学</h2>
+    <div class="skills">
+      <div class="skill-card">HTML</div>
+      <div class="skill-card">CSS</div>
+      <div class="skill-card">JavaScript（即将）</div>
+    </div>
+  </div>
+
+  <!-- ===== 我的项目 ===== -->
+  <div class="section" id="projects">
+    <h2>我的项目</h2>
+    <div class="project-list">
+      <div class="project-card" onclick="alert('个人主页 - 这是我的第一个网页项目！')">
+        <h3>个人主页</h3>
+        <p>我的第一个网页项目，用 HTML + CSS 搭建。</p>
+      </div>
+      <div class="project-card" onclick="alert('正在学习中，敬请期待！')">
+        <h3>下一个项目</h3>
+        <p>正在学习中，敬请期待！</p>
+      </div>
+      <div class="project-card" onclick="alert('大学期间会陆续更新！')">
+        <h3>更多作品</h3>
+        <p>大学期间会陆续更新。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 联系方式 ===== -->
+ <div class="footer">
+   <p>📧 邮箱：<a href="mailto:your-email@example.com">18750611601@163.com</a></p>
+   <p>📱 GitHub：<a href="https://github.com/your-name" target="_blank">github.com/Lian Zhanfeng</a></p>
+   <p style="margin-top:16px; font-size:14px; opacity:0.6;">&copy; 2026 连展锋</p>
+ </div>
+
+  <!-- ===== 回到顶部按钮 ===== -->
+  <button id="backToTop" onclick="scrollToTop()" title="回到顶部">↑</button>
+
+  <!-- ===== JavaScript：放在 body 最末尾，确保页面加载完再执行 ===== -->
+  <script>
+    // ===== 点赞计数器 =====
+    let likes = 0;
+
+    function addLike() {
+      likes = likes + 1;
+      document.getElementById("likeCount").textContent = likes;
+    }
+
+    // ===== 时钟函数：每秒更新一次 =====
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString("zh-CN", { hour12: false });
+      document.getElementById("clock").textContent = "🕐 " + timeStr;
+    }
+
+    // 页面加载后立即显示一次
+    updateClock();
+    // 然后每隔 1 秒（1000 毫秒）更新一次
+    setInterval(updateClock, 1000);
+
+    // ===== 问候语：根据时间显示 =====
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      let text;
+
+      if (hour >= 5 && hour < 12) {
+        text = "☀️ 早上好，今天也要加油！";
+      } else if (hour >= 12 && hour < 18) {
+        text = "🌤️ 下午好，学习效率最高的时间！";
+      } else {
+        text = "🌙 晚上好，注意休息哦！";
+      }
+
+      document.getElementById("greeting").textContent = text;
+    }
+
+    updateGreeting();
+
+    // 定义一个函数：切换夜间模式
+    function toggleDarkMode() {
+      // 获取 <body> 元素
+      const body = document.body;
+      // 切换 body 的 dark-mode 类
+      // 有就删掉，没有就加上
+      body.classList.toggle("dark-mode");
+
+      // 同时改按钮文字
+      const btn = document.querySelector(".toggle-btn");
+      if (body.classList.contains("dark-mode")) {
+        btn.textContent = "☀️ 日间";
+      } else {
+        btn.textContent = "🌙 夜间";
+      }
+    }
+
+    // ===== 回到顶部 =====
+    const backToTopBtn = document.getElementById("backToTop");
+
+    // 监听页面滚动
+    window.addEventListener("scroll", function() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add("show");
+      } else {
+        backToTopBtn.classList.remove("show");
+      }
+    });
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  </script>
+
+</body>
+</html>
+
+
